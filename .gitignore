@@ -1,0 +1,11 @@
+# pycharm
+.idea
+
+# data folder
+inp
+
+# pycache files
+*.pyc
+
+# ipynb checkpoints
+**/.ipynb_checkpoints
