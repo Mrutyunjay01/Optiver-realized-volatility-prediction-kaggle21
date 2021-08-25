@@ -61,3 +61,17 @@ def get_stats_window(df, seconds_in_bucket, features_dict, add_suffix=False):
     return df_feature
     pass
 
+
+def window_stats(df, feature_dict, second_windows):
+    df_merged = get_stats_window(df, seconds_in_bucket=0, features_dict=feature_dict)
+
+    temp_dfs = []
+    for window in second_windows:
+        temp_dfs.append((window, get_stats_window(df, seconds_in_bucket=window, features_dict=feature_dict, add_suffix=True)))
+
+    for window, temp_df in temp_dfs:
+        df_merged = df_merged.merge(temp_df, how="left", left_on="time_id_", right_on=f"time_id__{window}")
+        df_merged.drop(columns=[f"time_id__{window}"], inplace=True)
+
+    return df_merged
+    pass

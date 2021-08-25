@@ -29,19 +29,7 @@ def get_book_features(file_path):
     book_df["bid_spread"] = book_df["bid_price1"] - book_df["bid_price2"]
     book_df["ask_spread"] = book_df["ask_price1"] - book_df["ask_price2"]
 
-    book_df_merged = get_stats_window(book_df, seconds_in_bucket=0, features_dict=cfg.feature_dict_book)
-
-    book_df_450 = get_stats_window(book_df, seconds_in_bucket=450, features_dict=cfg.feature_dict_book, add_suffix=True)
-    book_df_300 = get_stats_window(book_df, seconds_in_bucket=300, features_dict=cfg.feature_dict_book, add_suffix=True)
-    book_df_150 = get_stats_window(book_df, seconds_in_bucket=150, features_dict=cfg.feature_dict_book, add_suffix=True)
-
-    # merge stats
-    book_df_merged = book_df_merged.merge(book_df_450, how="left", left_on="time_id_", right_on="time_id__450")
-    book_df_merged = book_df_merged.merge(book_df_300, how="left", left_on="time_id_", right_on="time_id__300")
-    book_df_merged = book_df_merged.merge(book_df_150, how="left", left_on="time_id_", right_on="time_id__150")
-
-
-    book_df_merged.drop(columns=["time_id__450", "time_id__300", "time_id__150"], inplace=True)
+    book_df_merged = window_stats(book_df, cfg.feature_dict_book, [450, 300, 150])
 
     book_df_merged["row_id"] = book_df_merged["time_id_"].apply(lambda x: f"{file_path.split('=')[1]}-{x}")
     book_df_merged.drop(["time_id_"], axis=1, inplace=True)

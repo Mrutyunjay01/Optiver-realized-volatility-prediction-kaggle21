@@ -7,4 +7,9 @@ def rmspe(y_true, y_pred):
 
 def feval_rmspe(y_pred, model, is_xgb=True):
     y_true = model.get_label()
-    return "RMSPE", rmspe(y_true, y_pred) if is_xgb else "RMSPE", rmspe(y_true, y_pred), False
+
+    if is_xgb:
+        return "RMSPE", rmspe(y_true, y_pred)
+
+    return "RMSPE", rmspe(y_true, y_pred), False
+
