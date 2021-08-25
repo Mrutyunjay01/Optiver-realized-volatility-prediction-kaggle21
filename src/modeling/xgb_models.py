@@ -5,14 +5,7 @@ from sklearn.model_selection import KFold
 
 import xgboost as xgb
 
-
-def rmspe(y_true, y_pred):
-    return np.sqrt(np.mean(np.square((y_true - y_pred) / y_true)))
-
-
-def feval_rmspe(y_pred, xgb_dtrain):
-    y_true = xgb_dtrain.get_label()
-    return "RMSPE", rmspe(y_true, y_pred)
+from ..utils.metric_utils import *
 
 
 class TrainFer:
