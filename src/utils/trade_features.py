@@ -5,7 +5,7 @@ from ..config import ConFig as cfg
 def get_trade_features(file_path):
     trade_df = pd.read_parquet(file_path)
 
-    trade_df["log_return"] = trade_df.groupby(["time_id"])["price"].apply(calculate_logreturn)
+    trade_df["log_return"] = trade_df.groupby(["time_id"])["price"].apply(calculate_log_return)
 
     trade_df_merged = window_stats(trade_df, cfg.feature_dict_trade, [450, 300, 150])
 

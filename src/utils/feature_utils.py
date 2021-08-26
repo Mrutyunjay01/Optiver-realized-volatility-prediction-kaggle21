@@ -39,7 +39,13 @@ def calculate_wap(df, rank="1"):
     return (df[f"bid_price{rank}"] * df[f"ask_size{rank}"] + df[f"bid_size{rank}"] * df[f"ask_price{rank}"]) / (df[f"bid_size{rank}"] + df[f"ask_size{rank}"])
 
 
-def calculate_logreturn(series):
+def calculate_inter_wap(df, rank="1"):
+    return (df[f"bid_price{rank}"] * df[f"bid_size{rank}"] + df[f"ask_size{rank}"] * df[f"ask_price{rank}"]) / (
+                df[f"bid_size{rank}"] + df[f"ask_size{rank}"])
+    pass
+
+
+def calculate_log_return(series):
     return np.log(series).diff()
 
 

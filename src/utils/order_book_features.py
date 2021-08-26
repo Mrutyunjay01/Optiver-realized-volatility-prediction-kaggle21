@@ -8,10 +8,14 @@ def get_book_features(file_path):
     # calculate wap
     book_df['wap1'] = calculate_wap(book_df, rank="1")
     book_df['wap2'] = calculate_wap(book_df, rank="2")
+    book_df['iwap1'] = calculate_inter_wap(book_df, rank="1")
+    book_df['iwap2'] = calculate_inter_wap(book_df, rank="2")
 
     # calculate log return
-    book_df["log_return1"] = book_df.groupby(["time_id"])["wap1"].apply(calculate_logreturn)
-    book_df["log_return2"] = book_df.groupby(["time_id"])["wap2"].apply(calculate_logreturn)
+    book_df["log_return1"] = book_df.groupby(["time_id"])["wap1"].apply(calculate_log_return)
+    book_df["log_return2"] = book_df.groupby(["time_id"])["wap2"].apply(calculate_log_return)
+    book_df["inter_log_return1"] = book_df.groupby(["time_id"])["iwap1"].apply(calculate_log_return)
+    book_df["inter_log_return2"] = book_df.groupby(["time_id"])["iwap2"].apply(calculate_log_return)
 
     # calculate balance
     book_df["wap_balance"] = abs(book_df["wap1"] - book_df["wap2"])

@@ -51,6 +51,12 @@ class ConFig:
             "min_child_weight": 1,
             "sampling_method": "uniform",
             # "tree_method": "gpu_hist"
+        },
+        "lgb_bl": {
+            "objective": "rmse",
+            "boosting_type": "gbdt",
+            "learning_rate": 0.05,
+            "verbose": 1,
         }
     }
     pass
