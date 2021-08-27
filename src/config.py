@@ -23,8 +23,12 @@ class ConFig:
     feature_dict_book = {
         "wap1": [np.sum, np.mean, np.std],
         "wap2": [np.sum, np.mean, np.std],
+        "iwap1": [np.sum, np.mean, np.std],
+        "iwap2": [np.sum, np.mean, np.std],
         "log_return1": [np.sum, calculate_rv, np.mean, np.std],
         "log_return2": [np.sum, calculate_rv, np.mean, np.std],
+        "inter_log_return1": [np.sum, calculate_rv, np.mean, np.std],
+        "inter_log_return2": [np.sum, calculate_rv, np.mean, np.std],
         "wap_balance": [np.sum, np.mean, np.std],
         "volume_imbalance": [np.sum, np.mean, np.std],
         "total_volume": [np.sum, np.mean, np.std],
@@ -56,7 +60,6 @@ class ConFig:
             "objective": "rmse",
             "boosting_type": "gbdt",
             "learning_rate": 0.05,
-            "verbose": 1,
         }
     }
     pass

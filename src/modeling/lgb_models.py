@@ -33,8 +33,8 @@ class TrainFer:
             x_train, y_train = X.iloc[train_idx], y.iloc[train_idx]
             x_val, y_val = X.iloc[val_idx], y.iloc[val_idx]
 
-            dtrain = lgb.Dataset(x_train, y_train, weight=1/np.square(y_train), categorical_feature="stock_id")
-            dval = lgb.Dataset(x_val, y_val, weight=1/np.square(y_val), categorical_feature="stock_id")
+            dtrain = lgb.Dataset(x_train, y_train, weight=1 / np.square(y_train), categorical_feature=["stock_id"])
+            dval = lgb.Dataset(x_val, y_val, weight=1 / np.square(y_val), categorical_feature=["stock_id"])
 
             model = lgb.train(params=self.params,
                               num_boost_round=10000,
@@ -45,12 +45,22 @@ class TrainFer:
                               feval=feval_wrapper)
 
             pickle.dump(model, open(os.path.join(self.model_path, f"lgb_bl_{fold}.pkl"), "wb"))
-            fold_preds = model.predict(dval)
+            fold_preds = model.predict(x_val)
             oof_score = rmspe(y_val, fold_preds)
             print(f"\nRMSPE of fold {fold}: {oof_score}")
 
             oof_scores.append(oof_score)
             oof_predictions[val_idx] = fold_preds
 
+        print(f"\nOOF Scores: {oof_scores}\n")
         rmspe_score = rmspe(y, oof_predictions)
         print(f"OOF RMSPE: {rmspe_score}")
+
+    def infer(self, x_test):
+        test_predictions = np.zeros(x_test.shape[0])
+
+        for mpth in os.listdir(self.model_path):
+            model = pickle.load(open(os.path.join(self.model_path, mpth), "rb"))
+            test_predictions += model.predict(x_test) / 5
+
+        return test_predictions
