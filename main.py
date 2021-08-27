@@ -1,8 +1,8 @@
 import gc
 import sys
-from src.dataset.create_data import *
-from src.modeling.lgb_models import *
-from src.config import ConFig as cfg
+from orvp.dataset.create_data import *
+from orvp.modeling.lgb_models import *
+from orvp.config import ConFig as cfg
 
 if __name__ == "__main__":
     _ = gc.collect()
