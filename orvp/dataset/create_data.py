@@ -19,19 +19,19 @@ class GetData:
     def _get_rowid(self):
         self.df["row_id"] = self.df["stock_id"].astype(str) + "-" + self.df["time_id"].astype(str)
 
-    def get_time_stock(self):
-        vol_cols = ['log_return1_calculate_rv', 'log_return2_calculate_rv',
-                    'log_return1_calculate_rv_450', 'log_return2_calculate_rv_450',
-                    'log_return1_calculate_rv_300', 'log_return2_calculate_rv_300',
-                    'log_return1_calculate_rv_150', 'log_return2_calculate_rv_150',
-                    'trade_log_return_calculate_rv', 'trade_log_return_calculate_rv_450',
-                    'trade_log_return_calculate_rv_300', 'trade_log_return_calculate_rv_150']
+    def get_time_stock(self, buck_windows=cfg.bucket_windows):
+        vol_cols = []
+        feat_set = ['log_return1_calculate_rv', 'log_return2_calculate_rv', 'trade_log_return_calculate_rv']
+        for feat in feat_set:
+            for sec in buck_windows:
+                vol_cols.append(feat + f'_{sec}')
+        vol_cols += feat_set
 
-        df_stock_id = self.df.groupby(['stock_id'])[vol_cols].agg(['mean', 'std', 'max', 'min', ]).reset_index()
+        df_stock_id = self.df.groupby(['stock_id'])[vol_cols].agg(['mean', 'std', 'max', 'min']).reset_index()
         df_stock_id.columns = ['_'.join(col) for col in df_stock_id.columns]
         df_stock_id = df_stock_id.add_suffix('_' + 'stock')
 
-        df_time_id = self.df.groupby(['time_id'])[vol_cols].agg(['mean', 'std', 'max', 'min', ]).reset_index()
+        df_time_id = self.df.groupby(['time_id'])[vol_cols].agg(['mean', 'std', 'max', 'min']).reset_index()
         df_time_id.columns = ['_'.join(col) for col in df_time_id.columns]
         df_time_id = df_time_id.add_suffix('_' + 'time')
 
@@ -55,9 +55,13 @@ class GetData:
 
         return df
 
-    def get_features(self):
+    def _get_features(self):
         features_df = self.process_features(self.df["stock_id"].unique())
         self.df = self.df.merge(features_df, on=["row_id"], how="left")
 
         return self.get_time_stock()
+        pass
+
+    def get_all_features(self, stock_groups):
+        return create_cluster_aggregations(self._get_features(), stock_groups)
         pass
