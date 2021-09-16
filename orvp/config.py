@@ -42,7 +42,8 @@ class ConFig:
         "log_return": [calculate_rv],
         "seconds_in_bucket": [count_unique],
         "size": [np.sum],
-        "order_count": [np.mean]
+        "order_count": [np.mean, np.sum],
+        "amount": [np.mean, np.sum, np.std]
     }
 
     model_params = {
@@ -62,4 +63,7 @@ class ConFig:
             "learning_rate": 0.05,
         }
     }
+
+    bucket_windows = [100, 200, 300, 400, 500]
+    random_state = 2021
     pass
