@@ -38,4 +38,4 @@ def get_book_features(file_path):
     book_df_merged["row_id"] = book_df_merged["time_id_"].apply(lambda x: f"{file_path.split('=')[1]}-{x}")
     book_df_merged.drop(["time_id_"], axis=1, inplace=True)
 
-    return book_df_merged
+    return book_df_merged.bfill().ffill()
