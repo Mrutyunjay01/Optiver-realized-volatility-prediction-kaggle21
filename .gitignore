@@ -1,6 +1,9 @@
 # pycharm
 .idea
 
+# model folder
+models
+
 # data folder
 inp
 
